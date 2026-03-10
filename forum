@@ -1,0 +1,184 @@
+import java.util.*;
+
+public class ForumHub {
+
+    static class Usuario {
+        String nome;
+
+        Usuario(String nome) {
+            this.nome = nome;
+        }
+    }
+
+    static class Topico {
+        int id;
+        String titulo;
+        String mensagem;
+        String curso;
+        String dataCriacao;
+        Usuario autor;
+
+        Topico(int id, String titulo, String mensagem, String curso, Usuario autor) {
+            this.id = id;
+            this.titulo = titulo;
+            this.mensagem = mensagem;
+            this.curso = curso;
+            this.autor = autor;
+            this.dataCriacao = new Date().toString();
+        }
+    }
+
+    static List<Topico> topicos = new ArrayList<>();
+    static int contadorId = 1;
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        int opcao = -1;
+
+        while (opcao != 0) {
+
+            System.out.println("\n===== FÓRUM HUB =====");
+            System.out.println("1 - Criar tópico");
+            System.out.println("2 - Listar tópicos");
+            System.out.println("3 - Buscar tópico por ID");
+            System.out.println("4 - Atualizar tópico");
+            System.out.println("5 - Deletar tópico");
+            System.out.println("0 - Sair");
+
+            opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
+
+                case 1:
+                    criarTopico(scanner);
+                    break;
+
+                case 2:
+                    listarTopicos();
+                    break;
+
+                case 3:
+                    buscarTopico(scanner);
+                    break;
+
+                case 4:
+                    atualizarTopico(scanner);
+                    break;
+
+                case 5:
+                    deletarTopico(scanner);
+                    break;
+            }
+        }
+    }
+
+    static void criarTopico(Scanner scanner) {
+
+        System.out.println("Nome do autor:");
+        String nome = scanner.nextLine();
+
+        System.out.println("Título:");
+        String titulo = scanner.nextLine();
+
+        System.out.println("Mensagem:");
+        String mensagem = scanner.nextLine();
+
+        System.out.println("Curso:");
+        String curso = scanner.nextLine();
+
+        Usuario usuario = new Usuario(nome);
+
+        Topico topico = new Topico(contadorId++, titulo, mensagem, curso, usuario);
+
+        topicos.add(topico);
+
+        System.out.println("Tópico criado com sucesso!");
+    }
+
+    static void listarTopicos() {
+
+        if (topicos.isEmpty()) {
+            System.out.println("Nenhum tópico cadastrado.");
+            return;
+        }
+
+        for (Topico t : topicos) {
+
+            System.out.println("\nID: " + t.id);
+            System.out.println("Título: " + t.titulo);
+            System.out.println("Mensagem: " + t.mensagem);
+            System.out.println("Curso: " + t.curso);
+            System.out.println("Autor: " + t.autor.nome);
+            System.out.println("Data: " + t.dataCriacao);
+        }
+    }
+
+    static void buscarTopico(Scanner scanner) {
+
+        System.out.println("Digite o ID:");
+        int id = scanner.nextInt();
+
+        for (Topico t : topicos) {
+
+            if (t.id == id) {
+                System.out.println("Título: " + t.titulo);
+                System.out.println("Mensagem: " + t.mensagem);
+                System.out.println("Curso: " + t.curso);
+                System.out.println("Autor: " + t.autor.nome);
+                return;
+            }
+        }
+
+        System.out.println("Tópico não encontrado.");
+    }
+
+    static void atualizarTopico(Scanner scanner) {
+
+        System.out.println("Digite o ID do tópico:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        for (Topico t : topicos) {
+
+            if (t.id == id) {
+
+                System.out.println("Novo título:");
+                t.titulo = scanner.nextLine();
+
+                System.out.println("Nova mensagem:");
+                t.mensagem = scanner.nextLine();
+
+                System.out.println("Novo curso:");
+                t.curso = scanner.nextLine();
+
+                System.out.println("Tópico atualizado!");
+                return;
+            }
+        }
+
+        System.out.println("Tópico não encontrado.");
+    }
+
+    static void deletarTopico(Scanner scanner) {
+
+        System.out.println("Digite o ID do tópico:");
+        int id = scanner.nextInt();
+
+        Iterator<Topico> iterator = topicos.iterator();
+
+        while (iterator.hasNext()) {
+
+            Topico t = iterator.next();
+
+            if (t.id == id) {
+                iterator.remove();
+                System.out.println("Tópico deletado.");
+                return;
+            }
+        }
+
+        System.out.println("Tópico não encontrado.");
+    }
+}
